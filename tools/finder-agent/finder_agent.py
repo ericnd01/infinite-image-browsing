@@ -102,7 +102,8 @@ def make_handler(token: str):
                 if os.path.isdir(path):
                     subprocess.run(["open", path], check=True)
                 else:
-                    subprocess.run(["open", "-R", path], check=True)
+                    subprocess.run(["open", "-R", path], check=True)  # reveal + select in Finder
+                    subprocess.run(["open", path], check=True)  # launch with the default app
             except subprocess.CalledProcessError as e:
                 self._json(500, {"ok": False, "error": str(e)})
                 return

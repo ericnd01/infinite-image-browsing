@@ -313,6 +313,11 @@ export const zhHans = {
   remoteMountServerPath: '服务端路径前缀',
   remoteMountLocalPath: '本地挂载点',
   remoteMountLocalPathCopied: '本地路径已复制到剪贴板',
+  remoteMountOpenedViaAgent: '已在 Finder 中打开',
+  localOpenAgentDesc:
+    '可选：在 Mac 上运行 tools/finder-agent 中的小型辅助代理（python3 finder_agent.py），即可让"使用本地文件浏览器打开"直接在 Finder 中显示文件，而不仅仅是把路径复制到剪贴板。请填入它启动时打印的 URL 和令牌。',
+  localOpenAgentUrl: '本地打开代理 URL',
+  localOpenAgentToken: '本地打开代理令牌',
   addToSearchScanPathAndQuickMove: '添加到搜索扫描路径',
   removeFromSearchScanPathAndQuickMove: '从搜索扫描路径和快速移动中移除',
   serverKeyRequired: '服务器配置了密匙，你必须提供相同的密匙才能继续使用',

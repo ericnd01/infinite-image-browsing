@@ -239,7 +239,9 @@ export const presistKeys = [
   'autoUpdateIndex',
   'fullscreenMenuBlockVisibility',
   'remoteMountServerPath',
-  'remoteMountLocalPath'
+  'remoteMountLocalPath',
+  'localOpenAgentUrl',
+  'localOpenAgentToken'
 ]
 
 function cellWidthMap(x: number): number {
@@ -394,6 +396,25 @@ export const useGlobalStore = defineStore(
     // runs on a remote machine (e.g. a Linux box) accessed via a mounted share on the client.
     const remoteMountServerPath = ref('')
     const remoteMountLocalPath = ref('')
+    // Optional local helper agent (tools/finder-agent) that reveals the resolved
+    // local path in Finder directly, since browsers block file:// navigation
+    // triggered from an http(s) page.
+    const localOpenAgentUrl = ref('http://127.0.0.1:8765')
+    const localOpenAgentToken = ref('')
+    const openViaLocalAgent = async (localPath: string): Promise<boolean> => {
+      const url = localOpenAgentUrl.value.trim().replace(/\/+$/, '')
+      const token = localOpenAgentToken.value.trim()
+      if (!url || !token) {
+        return false
+      }
+      try {
+        const res = await fetch(`${url}/open?path=${encodeURIComponent(localPath)}&token=${encodeURIComponent(token)}`)
+        return res.ok
+      } catch (error) {
+        console.error('local open agent unreachable', error)
+        return false
+      }
+    }
     const resolveRemoteMountPath = (fullpath: string): string | undefined => {
       const serverPath = remoteMountServerPath.value.trim().replace(/[/\\]+$/, '')
       const localPath = remoteMountLocalPath.value.trim().replace(/[/\\]+$/, '')
@@ -502,6 +523,9 @@ export const useGlobalStore = defineStore(
       remoteMountServerPath,
       remoteMountLocalPath,
       resolveRemoteMountPath,
+      localOpenAgentUrl,
+      localOpenAgentToken,
+      openViaLocalAgent,
       previewBgOpacity,
       defaultInitinalPage: ref<DefaultInitinalPage>('empty'),
       autoRefreshWalkMode: ref(true),

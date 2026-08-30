@@ -318,8 +318,12 @@ export function useFileItemActions (
       case 'openWithLocalFileBrowser': {
         const localPath = global.resolveRemoteMountPath(file.fullpath)
         if (localPath) {
-          window.open(localPathToFileUrl(localPath), '_blank')
-          copy2clipboardI18n(localPath, t('remoteMountLocalPathCopied'))
+          if (await global.openViaLocalAgent(localPath)) {
+            message.success(t('remoteMountOpenedViaAgent'))
+          } else {
+            window.open(localPathToFileUrl(localPath), '_blank')
+            copy2clipboardI18n(localPath, t('remoteMountLocalPathCopied'))
+          }
         } else {
           await openFolder(file.fullpath)
         }

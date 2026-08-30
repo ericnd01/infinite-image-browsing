@@ -911,8 +911,12 @@ const handleOpenFolder = async () => {
   if (!fullpath) return
   const localPath = globalStore.resolveRemoteMountPath(fullpath)
   if (localPath) {
-    window.open(localPathToFileUrl(localPath), '_blank')
-    copy2clipboardI18n(localPath, t('remoteMountLocalPathCopied'))
+    if (await globalStore.openViaLocalAgent(localPath)) {
+      message.success(t('remoteMountOpenedViaAgent'))
+    } else {
+      window.open(localPathToFileUrl(localPath), '_blank')
+      copy2clipboardI18n(localPath, t('remoteMountLocalPathCopied'))
+    }
   } else {
     await openFolder(fullpath)
   }

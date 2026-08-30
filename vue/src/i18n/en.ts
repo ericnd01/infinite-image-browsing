@@ -288,6 +288,11 @@ You can specify which snapshot to restore to when starting IIB in the global set
   remoteMountServerPath: 'Server Path Prefix',
   remoteMountLocalPath: 'Local Mount Point',
   remoteMountLocalPathCopied: 'Local path copied to clipboard',
+  remoteMountOpenedViaAgent: 'Opened in Finder',
+  localOpenAgentDesc:
+    'Optional: run the small helper agent from tools/finder-agent on your Mac (python3 finder_agent.py) to have "Open with Local File Browser" reveal the file in Finder directly, instead of only copying the path to your clipboard. Fill in the URL and token it prints on startup.',
+  localOpenAgentUrl: 'Local Open Agent URL',
+  localOpenAgentToken: 'Local Open Agent Token',
   'fuzzy-search-noResults': 'Nothing was found',
   'fuzzy-search-placeholder': 'Enter a part of the image information or filename to search',
   'fuzzy-search': 'Fuzzy search',

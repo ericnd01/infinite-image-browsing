@@ -247,6 +247,13 @@ const presetShortcutGroups = computed(() => ([
       <a-form-item :label="$t('remoteMountLocalPath')">
         <a-input v-model:value="globalStore.remoteMountLocalPath" placeholder="/Volumes/Outputs" />
       </a-form-item>
+      <div style="color: #666; margin: 8px 0 16px;">{{ t('localOpenAgentDesc') }}</div>
+      <a-form-item :label="$t('localOpenAgentUrl')">
+        <a-input v-model:value="globalStore.localOpenAgentUrl" placeholder="http://127.0.0.1:8765" />
+      </a-form-item>
+      <a-form-item :label="$t('localOpenAgentToken')">
+        <a-input v-model:value="globalStore.localOpenAgentToken" placeholder="" />
+      </a-form-item>
 
       
 

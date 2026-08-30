@@ -286,7 +286,7 @@ const handleAudioClick = () => {
           <close-circle-outlined />
         </div>
         <div class="more" v-if="enableRightClickMenu">
-          <a-dropdown>
+          <a-dropdown :trigger="['click']">
             <div class="float-btn-wrap">
               <ellipsis-outlined />
             </div>

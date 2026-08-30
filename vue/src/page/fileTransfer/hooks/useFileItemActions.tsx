@@ -16,7 +16,7 @@ import { Checkbox, Modal, message } from 'ant-design-vue'
 import type { MenuInfo } from 'ant-design-vue/lib/menu/src/interface'
 import { t } from '@/i18n'
 import { batchUpdateImageTag, toggleCustomTagToImg } from '@/api/db'
-import { downloadFileInfoJSON, downloadFiles, toRawFileUrl } from '@/util/file'
+import { downloadFileInfoJSON, downloadFiles, localPathToFileUrl, toRawFileUrl } from '@/util/file'
 import { getShortcutStrFromEvent } from '@/util/shortcut'
 import { MultiSelectTips, openAddNewTagModal, openRenameFileModal } from '@/components/functionalCallableComp'
 import { batchDownload, events, imgTransferBus, stackCache, tagStore, useEventListen, useHookShareState, global } from '.'
@@ -316,7 +316,13 @@ export function useFileItemActions (
         break
       }
       case 'openWithLocalFileBrowser': {
-        await openFolder(file.fullpath)
+        const localPath = global.resolveRemoteMountPath(file.fullpath)
+        if (localPath) {
+          window.open(localPathToFileUrl(localPath), '_blank')
+          copy2clipboardI18n(localPath, t('remoteMountLocalPathCopied'))
+        } else {
+          await openFolder(file.fullpath)
+        }
         break
       }
       case 'deleteFiles': {

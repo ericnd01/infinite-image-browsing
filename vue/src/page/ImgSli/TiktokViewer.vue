@@ -9,7 +9,7 @@ import { openAddNewTagModal, openEditPromptModal } from '@/components/functional
 import { toggleCustomTagToImg } from '@/api/db'
 import { deleteFiles } from '@/api/files'
 import { getImageGenerationInfo, openFolder, openWithDefaultApp } from '@/api'
-import { toRawFileUrl } from '@/util/file'
+import { localPathToFileUrl, toRawFileUrl } from '@/util/file'
 import { parse } from '@/util/stable-diffusion-image-metadata'
 import { getParentDirectory } from '@/util/path'
 import { message, Modal } from 'ant-design-vue'
@@ -909,7 +909,13 @@ const handleDeleteCurrent = async () => {
 const handleOpenFolder = async () => {
   const fullpath = getCurrentFullpath()
   if (!fullpath) return
-  await openFolder(fullpath)
+  const localPath = globalStore.resolveRemoteMountPath(fullpath)
+  if (localPath) {
+    window.open(localPathToFileUrl(localPath), '_blank')
+    copy2clipboardI18n(localPath, t('remoteMountLocalPathCopied'))
+  } else {
+    await openFolder(fullpath)
+  }
 }
 
 const handleOpenWithDefaultApp = async () => {

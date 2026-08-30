@@ -237,7 +237,9 @@ export const presistKeys = [
   'showRecentInStartup',
   'showTiktokNavigator',
   'autoUpdateIndex',
-  'fullscreenMenuBlockVisibility'
+  'fullscreenMenuBlockVisibility',
+  'remoteMountServerPath',
+  'remoteMountLocalPath'
 ]
 
 function cellWidthMap(x: number): number {
@@ -387,6 +389,20 @@ export const useGlobalStore = defineStore(
         return loc
       }
     }
+    // Maps an absolute server-side path prefix to a locally mounted Finder/Explorer path,
+    // so "Open with Local File Browser" can resolve a usable path when the app server
+    // runs on a remote machine (e.g. a Linux box) accessed via a mounted share on the client.
+    const remoteMountServerPath = ref('')
+    const remoteMountLocalPath = ref('')
+    const resolveRemoteMountPath = (fullpath: string): string | undefined => {
+      const serverPath = remoteMountServerPath.value.trim()
+      const localPath = remoteMountLocalPath.value.trim()
+      if (!serverPath || !localPath || !fullpath.startsWith(serverPath)) {
+        return undefined
+      }
+      return localPath.replace(/[/\\]+$/, '') + fullpath.slice(serverPath.length)
+    }
+
     const previewBgOpacity = ref(0.6)
     const magicSwitchTiktokView = ref(false)
     const showRandomImageInStartup = ref(true)
@@ -478,6 +494,9 @@ export const useGlobalStore = defineStore(
       ignoredConfirmActions,
       getShortPath,
       extraPathAliasMap,
+      remoteMountServerPath,
+      remoteMountLocalPath,
+      resolveRemoteMountPath,
       previewBgOpacity,
       defaultInitinalPage: ref<DefaultInitinalPage>('empty'),
       autoRefreshWalkMode: ref(true),

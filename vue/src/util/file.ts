@@ -18,6 +18,9 @@ export const toImageThumbnailUrl = (file: FileNodeInfo, size: string = '512x512'
   )}`
 }
 
+export const localPathToFileUrl = (localPath: string) =>
+  'file://' + localPath.split(/[/\\]/).map(encode).join('/')
+
 export const toStreamVideoUrl = (file: FileNodeInfo) =>
   `${apiBase.value}/stream_video?path=${encode(file.fullpath)}`
 

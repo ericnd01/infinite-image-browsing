@@ -239,6 +239,15 @@ const presetShortcutGroups = computed(() => ([
         <sub style="padding-left: 8px;color: #666;">{{ $t('takeEffectAfterReloadPage') }}</sub>
       </a-form-item>
 
+      <h2>{{ t('remoteMount') }}</h2>
+      <div style="color: #666; margin-bottom: 16px;">{{ t('remoteMountDesc') }}</div>
+      <a-form-item :label="$t('remoteMountServerPath')">
+        <a-input v-model:value="globalStore.remoteMountServerPath" placeholder="/mnt/outputs" />
+      </a-form-item>
+      <a-form-item :label="$t('remoteMountLocalPath')">
+        <a-input v-model:value="globalStore.remoteMountLocalPath" placeholder="/Volumes/Outputs" />
+      </a-form-item>
+
       
 
       <a-modal v-model:visible="showPresetShortcutModal" :title="t('shortcutPresetTitle')" width="800px" :footer="null">

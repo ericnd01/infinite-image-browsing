@@ -28,3 +28,4 @@ iib.db-wal
 CLAUDE.md
 .claude/*
 videos/*
+.venv/

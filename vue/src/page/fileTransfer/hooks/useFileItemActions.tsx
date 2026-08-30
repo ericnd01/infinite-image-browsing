@@ -315,11 +315,13 @@ export function useFileItemActions (
         openTiktokViewWithFiles(sortedFiles.value, idx)
         break
       }
-      case 'openWithLocalFileBrowser': {
+      case 'openWithLocalFileBrowser':
+      case 'revealWithLocalFileBrowser': {
+        const mode = e.key === 'revealWithLocalFileBrowser' ? 'reveal' : 'open'
         const localPath = global.resolveRemoteMountPath(file.fullpath)
         if (localPath) {
-          if (await global.openViaLocalAgent(localPath)) {
-            message.success(t('remoteMountOpenedViaAgent'))
+          if (await global.openViaLocalAgent(localPath, mode)) {
+            message.success(mode === 'reveal' ? t('remoteMountRevealedViaAgent') : t('remoteMountOpenedViaAgent'))
           } else {
             window.open(localPathToFileUrl(localPath), '_blank')
             copy2clipboardI18n(localPath, t('remoteMountLocalPathCopied'))

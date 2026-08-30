@@ -282,6 +282,8 @@ You can specify which snapshot to restore to when starting IIB in the global set
   removeFromSearchScanPathAndQuickMove: 'Remove from Search Scan Path and Quick Move',
   addToSearchScanPathAndQuickMove: 'Add to Search Scan Path',
   openWithLocalFileBrowser: 'Open with Local File Browser',
+  revealWithLocalFileBrowser: 'Reveal in Local File Browser',
+  remoteMountRevealedViaAgent: 'Revealed in Finder',
   remoteMount: 'Remote Mount',
   remoteMountDesc:
     'If the app server runs on a remote machine that you access through a locally mounted share (e.g. SMB/NFS mounted in Finder), configure the server-side path and its matching local mount point below. "Open with Local File Browser" will then rewrite the path to the local mount instead of trying to open it on the server.',

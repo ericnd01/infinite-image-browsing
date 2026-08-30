@@ -98,12 +98,17 @@ def make_handler(token: str):
                 self._json(404, {"ok": False, "error": f"path does not exist on this Mac: {path}"})
                 return
 
+            # mode=open (default): launch the file in its default app.
+            # mode=reveal: just select it in Finder, without opening it.
+            mode = (qs.get("mode") or ["open"])[0]
+
             try:
                 if os.path.isdir(path):
                     subprocess.run(["open", path], check=True)
+                elif mode == "reveal":
+                    subprocess.run(["open", "-R", path], check=True)
                 else:
-                    subprocess.run(["open", "-R", path], check=True)  # reveal + select in Finder
-                    subprocess.run(["open", path], check=True)  # launch with the default app
+                    subprocess.run(["open", path], check=True)
             except subprocess.CalledProcessError as e:
                 self._json(500, {"ok": False, "error": str(e)})
                 return

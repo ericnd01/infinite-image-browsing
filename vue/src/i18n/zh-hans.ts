@@ -307,6 +307,8 @@ export const zhHans = {
   'fuzzy-search-placeholder': '输入图像信息或者文件名的一部分来进行搜索',
   'fuzzy-search-noResults': '什么都没找到',
   openWithLocalFileBrowser: '使用本地文件浏览器打开',
+  revealWithLocalFileBrowser: '在本地文件浏览器中显示',
+  remoteMountRevealedViaAgent: '已在 Finder 中显示',
   remoteMount: '远程挂载',
   remoteMountDesc:
     '如果应用服务端运行在远程主机上，而你是通过本地挂载的共享目录（例如 Finder 中挂载的 SMB/NFS）访问的，请在下方配置服务端路径前缀及其对应的本地挂载点。"使用本地文件浏览器打开" 将把路径重写为本地挂载路径，而不是尝试在服务端打开。',

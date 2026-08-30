@@ -401,14 +401,14 @@ export const useGlobalStore = defineStore(
     // triggered from an http(s) page.
     const localOpenAgentUrl = ref('http://127.0.0.1:8765')
     const localOpenAgentToken = ref('')
-    const openViaLocalAgent = async (localPath: string): Promise<boolean> => {
+    const openViaLocalAgent = async (localPath: string, mode: 'open' | 'reveal' = 'open'): Promise<boolean> => {
       const url = localOpenAgentUrl.value.trim().replace(/\/+$/, '')
       const token = localOpenAgentToken.value.trim()
       if (!url || !token) {
         return false
       }
       try {
-        const res = await fetch(`${url}/open?path=${encodeURIComponent(localPath)}&token=${encodeURIComponent(token)}`)
+        const res = await fetch(`${url}/open?path=${encodeURIComponent(localPath)}&token=${encodeURIComponent(token)}&mode=${mode}`)
         return res.ok
       } catch (error) {
         console.error('local open agent unreachable', error)

@@ -84,6 +84,7 @@ const tags = computed(() => {
         <a-menu-divider />
         <a-menu-item key="openFileLocationInNewTab">{{ $t('openFileLocationInNewTab') }}</a-menu-item>
         <a-menu-item key="openWithLocalFileBrowser">{{ $t('openWithLocalFileBrowser') }}</a-menu-item>
+        <a-menu-item key="revealWithLocalFileBrowser">{{ $t('revealWithLocalFileBrowser') }}</a-menu-item>
       </template>
       
       <a-menu-divider />

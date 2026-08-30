@@ -395,12 +395,17 @@ export const useGlobalStore = defineStore(
     const remoteMountServerPath = ref('')
     const remoteMountLocalPath = ref('')
     const resolveRemoteMountPath = (fullpath: string): string | undefined => {
-      const serverPath = remoteMountServerPath.value.trim()
-      const localPath = remoteMountLocalPath.value.trim()
+      const serverPath = remoteMountServerPath.value.trim().replace(/[/\\]+$/, '')
+      const localPath = remoteMountLocalPath.value.trim().replace(/[/\\]+$/, '')
       if (!serverPath || !localPath || !fullpath.startsWith(serverPath)) {
         return undefined
       }
-      return localPath.replace(/[/\\]+$/, '') + fullpath.slice(serverPath.length)
+      const rest = fullpath.slice(serverPath.length)
+      // Reject a partial-segment match, e.g. serverPath "/mnt/sd" matching "/mnt/sdcard/..."
+      if (rest && !/^[/\\]/.test(rest)) {
+        return undefined
+      }
+      return localPath + rest
     }
 
     const previewBgOpacity = ref(0.6)

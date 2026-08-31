@@ -230,7 +230,21 @@ const controlVideoPlayback = async () => {
         // 添加视频结束事件监听
         video.onended = () => handleVideoEnded(index)
 
-        await video.play()
+        try {
+          await video.play()
+        } catch (playErr) {
+          // 浏览器的自动播放策略可能拒绝非静音播放（尤其是通过滚动/键盘切换，而非直接点击触发时）。
+          // 回退为静音播放，避免视频卡在暂停状态；同步 isMuted 使静音图标反映实际状态。
+          if (!video.muted) {
+            video.muted = true
+            isMuted.value = true
+            await video.play().catch((retryErr) => {
+              console.warn(`视频静音重试播放失败 (index: ${index}):`, retryErr)
+            })
+          } else {
+            throw playErr
+          }
+        }
       } else {
         // 非当前显示的视频：暂停并重置
         video.pause()
@@ -256,7 +270,19 @@ const controlVideoPlayback = async () => {
         // 添加音频结束事件监听
         audio.onended = () => handleAudioEnded(index)
 
-        await audio.play()
+        try {
+          await audio.play()
+        } catch (playErr) {
+          if (!audio.muted) {
+            audio.muted = true
+            isMuted.value = true
+            await audio.play().catch((retryErr) => {
+              console.warn(`音频静音重试播放失败 (index: ${index}):`, retryErr)
+            })
+          } else {
+            throw playErr
+          }
+        }
       } else {
         // 非当前显示的音频：暂停并重置
         audio.pause()

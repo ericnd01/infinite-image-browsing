@@ -36,6 +36,7 @@ const tags = computed(() => {
     <template v-if="file.type === 'file'">
       <template v-if="isMediaFile(file.name)">
         <a-menu-item key="viewGenInfo">{{ $t('viewGenerationInfo') }}</a-menu-item>
+        <a-menu-item key="copyWorkflow">{{ $t('copyWorkflow') }}</a-menu-item>
         <a-menu-item key="tiktokView">{{ $t('tiktokView') }}</a-menu-item>
         <a-menu-divider />
         <template v-if="global.conf?.launch_mode !== 'server'">

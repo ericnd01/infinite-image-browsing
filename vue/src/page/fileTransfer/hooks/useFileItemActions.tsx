@@ -1,7 +1,7 @@
 import { type FileTransferTabPane, type Shortcut  } from '@/store/useGlobalStore'
 import { useMouseInElement } from '@vueuse/core'
 import { ref } from 'vue'
-import { genInfoCompleted, getImageGenerationInfo, openFolder, openWithDefaultApp, setImgPath } from '@/api'
+import { genInfoCompleted, getImageExif, getImageGenerationInfo, openFolder, openWithDefaultApp, setImgPath } from '@/api'
 import {
   delay,
   useWatchDocument} from 'vue3-ts-util'
@@ -308,6 +308,15 @@ export function useFileItemActions (
       case 'viewGenInfo': {
         showGenInfo.value = true
         imageGenInfo.value = await q.pushAction(() => getImageGenerationInfo(file.fullpath)).res
+        break
+      }
+      case 'copyWorkflow': {
+        const exif = await q.pushAction(() => getImageExif(file.fullpath)).res
+        if (exif?.workflow) {
+          copy2clipboardI18n(exif.workflow, t('copiedWorkflow'))
+        } else {
+          message.warn(t('noWorkflowFound'))
+        }
         break
       }
       case 'tiktokView': {

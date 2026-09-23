@@ -312,8 +312,12 @@ export function useFileItemActions (
       }
       case 'copyWorkflow': {
         const exif = await q.pushAction(() => getImageExif(file.fullpath)).res
-        if (exif?.workflow) {
-          copy2clipboardI18n(exif.workflow, t('copiedWorkflow'))
+        // PNG tEXt chunk keywords aren't case-normalized by the backend, and different
+        // tools/forks write "workflow" vs "Workflow", so match case-insensitively.
+        const workflowKey = exif && Object.keys(exif).find((k) => k.toLowerCase() === 'workflow')
+        const workflow = workflowKey ? exif[workflowKey] : undefined
+        if (workflow) {
+          copy2clipboardI18n(workflow, t('copiedWorkflow'))
         } else {
           message.warn(t('noWorkflowFound'))
         }

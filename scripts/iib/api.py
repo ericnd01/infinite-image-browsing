@@ -969,7 +969,9 @@ def infinite_image_browsing_api(app: FastAPI, **kwargs):
     async def image_exif(path: str):
         try:
             if get_video_type(path):
-                return {}
+                import av
+                with av.open(path) as container:
+                    return dict(container.metadata)
             with Image.open(path) as img:
                 exif_data = {}
                 try:

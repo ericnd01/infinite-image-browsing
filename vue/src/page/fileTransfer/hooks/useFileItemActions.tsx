@@ -312,10 +312,31 @@ export function useFileItemActions (
       }
       case 'copyWorkflow': {
         const exif = await q.pushAction(() => getImageExif(file.fullpath)).res
-        // PNG tEXt chunk keywords aren't case-normalized by the backend, and different
-        // tools/forks write "workflow" vs "Workflow", so match case-insensitively.
-        const workflowKey = exif && Object.keys(exif).find((k) => k.toLowerCase() === 'workflow')
-        const workflow = workflowKey ? exif[workflowKey] : undefined
+        const findKey = (obj: Record<string, string> | undefined, name: string) =>
+          obj && Object.keys(obj).find((k) => k.toLowerCase() === name)
+
+        // Different exporters embed the workflow differently:
+        // - most: a top-level "workflow" field holding the graph JSON directly.
+        // - ComfyUI's VideoHelperSuite (VHS_VideoCombine) node: a single "comment" field
+        //   holding a combined JSON object like {"prompt": ..., "workflow": ...}.
+        let workflow: string | undefined
+        const workflowKey = findKey(exif, 'workflow')
+        if (workflowKey) {
+          workflow = exif![workflowKey]
+        } else {
+          const commentKey = findKey(exif, 'comment')
+          if (commentKey) {
+            try {
+              const parsed = JSON.parse(exif![commentKey])
+              if (parsed?.workflow) {
+                workflow = typeof parsed.workflow === 'string' ? parsed.workflow : JSON.stringify(parsed.workflow)
+              }
+            } catch {
+              // comment wasn't JSON / had no workflow key; fall through to the not-found message
+            }
+          }
+        }
+
         if (workflow) {
           copy2clipboardI18n(workflow, t('copiedWorkflow'))
         } else {
